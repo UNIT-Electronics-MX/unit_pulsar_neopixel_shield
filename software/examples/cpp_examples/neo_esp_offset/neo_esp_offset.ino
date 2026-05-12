@@ -191,15 +191,651 @@ int getCharIndex(char c) {
   }
 }
 
+// ============== SPRITES DE PERSONAJES ==============
+// Sprites 8x8 píxeles (1 bit por píxel, 1 = encendido, 0 = apagado)
+
+// Pikachu mejorado (8x8 píxeles)
+const uint8_t spritePikachu[8] = {
+  0b00111100,  // Fila 0: Orejas
+  0b01111110,  // Fila 1: Parte superior cabeza
+  0b11111111,  // Fila 2: Cabeza con orejas
+  0b11011011,  // Fila 3: Ojos
+  0b11111111,  // Fila 4: Mejillas rojas
+  0b01111110,  // Fila 5: Cuerpo
+  0b00111100,  // Fila 6: Parte inferior
+  0b01000010   // Fila 7: Pies
+};
+
+// Pokébola (8x8 píxeles)
+const uint8_t spritePokebola[8] = {
+  0b00111100,  // Fila 0
+  0b01111110,  // Fila 1: Parte superior roja
+  0b11111111,  // Fila 2
+  0b11111111,  // Fila 3: Línea negra centro
+  0b11111111,  // Fila 4: Botón blanco centro
+  0b11111111,  // Fila 5: Parte inferior blanca
+  0b01111110,  // Fila 6
+  0b00111100   // Fila 7
+};
+
+// Mario mejorado (8x8 píxeles)
+const uint8_t spriteMario[8] = {
+  0b00111100,  // Fila 0
+  0b01111110,  // Fila 1
+  0b00111100,  // Fila 2
+  0b01011010,  // Fila 3
+  0b00111100,  // Fila 4
+  0b01111110,  // Fila 5
+  0b01011010,  // Fila 6
+  0b01100110   // Fila 7
+};
+
+// Mario saltando mejorado (8x8 píxeles)
+const uint8_t spriteMarioJump[8] = {
+  0b00111100,  // Fila 0
+  0b01111110,  // Fila 1
+  0b11111111,  // Fila 2
+  0b00111100,  // Fila 3
+  0b01000010,  // Fila 4
+  0b11000011,  // Fila 5
+  0b01000010,  // Fila 6
+  0b01000010   // Fila 7
+};
+
+// Pac-Man (8x8 píxeles)
+const uint8_t spritePacman[8] = {
+  0b00111100,  // Fila 0
+  0b01111110,  // Fila 1
+  0b11111110,  // Fila 2: Boca abierta
+  0b11111100,  // Fila 3
+  0b11111100,  // Fila 4
+  0b11111110,  // Fila 5
+  0b01111110,  // Fila 6
+  0b00111100   // Fila 7
+};
+
+// Hongo de Mario (8x8 píxeles)
+const uint8_t spriteHongo[8] = {
+  0b00000000,  // Fila 0
+  0b00111100,  // Fila 1: Parte superior
+  0b01111110,  // Fila 2: Sombrero rojo
+  0b11111111,  // Fila 3: Puntos blancos
+  0b11111111,  // Fila 4
+  0b01111110,  // Fila 5: Tallo blanco
+  0b01111110,  // Fila 6
+  0b00111100   // Fila 7
+};
+
+// Corazón (8x8 píxeles)
+const uint8_t spriteCorazon[8] = {
+  0b00000000,  // Fila 0
+  0b01100110,  // Fila 1
+  0b11111111,  // Fila 2
+  0b11111111,  // Fila 3
+  0b11111111,  // Fila 4
+  0b01111110,  // Fila 5
+  0b00111100,  // Fila 6
+  0b00011000   // Fila 7
+};
+
+// Estrella (8x8 píxeles)
+const uint8_t spriteEstrella[8] = {
+  0b00011000,  // Fila 0: Punta superior
+  0b00011000,  // Fila 1
+  0b01111110,  // Fila 2: Brazos
+  0b00111100,  // Fila 3: Centro
+  0b01111110,  // Fila 4
+  0b11111111,  // Fila 5: Parte ancha
+  0b01111110,  // Fila 6
+  0b00100100   // Fila 7: Puntas inferiores
+};
+
+// Fantasma Pac-Man (8x8 píxeles)
+const uint8_t spriteFantasma[8] = {
+  0b00111100,  // Fila 0: Parte superior
+  0b01111110,  // Fila 1
+  0b11111111,  // Fila 2: Ojos
+  0b11111111,  // Fila 3
+  0b11111111,  // Fila 4: Cuerpo
+  0b11111111,  // Fila 5
+  0b11111111,  // Fila 6
+  0b10110101   // Fila 7: Parte inferior ondulada
+};
+
+// Nota musical (8x8 píxeles)
+const uint8_t spriteNota[8] = {
+  0b00000011,  // Fila 0: Parte superior
+  0b00000011,  // Fila 1: Barra
+  0b00000011,  // Fila 2
+  0b00000011,  // Fila 3
+  0b00000011,  // Fila 4
+  0b01100011,  // Fila 5: Cabeza de nota
+  0b11110011,  // Fila 6
+  0b01100000   // Fila 7
+};
+
+// Función para dibujar un sprite rotado 90° (horizontal)
+// Los sprites se mueven a lo largo de las 32 filas (eje vertical de la matriz)
+void drawSprite(const uint8_t sprite[], int startX, int startY, uint32_t color) {
+  uint32_t scaledColor = escalarColor(color);
+  
+  // Rotación 90° en sentido horario del sprite
+  for (int row = 0; row < 8; row++) {
+    uint8_t rowData = sprite[row];
+    
+    for (int col = 0; col < 8; col++) {
+      if (rowData & (1 << (7 - col))) {  // Bit encendido
+        // Rotar el sprite 90° horario: (row, col) -> (col, 7-row)
+        int x = startX + col;          // col se convierte en X
+        int y = startY + (7 - row);    // 7-row se convierte en Y (rotado)
+        
+        if (x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT) {
+          int pixelIndex = getPixelIndex(x, y);
+          if (pixelIndex >= 0) {
+            strip.setPixelColor(pixelIndex, scaledColor);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Función para dibujar Pokébola con colores específicos
+void drawPokebola(int startX, int startY) {
+  for (int row = 0; row < 8; row++) {
+    uint8_t rowData = spritePokebola[row];
+    
+    for (int col = 0; col < 8; col++) {
+      if (rowData & (1 << (7 - col))) {
+        // Rotar 90° horario
+        int x = startX + col;
+        int y = startY + (7 - row);
+        
+        if (x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT) {
+          int pixelIndex = getPixelIndex(x, y);
+          if (pixelIndex >= 0) {
+            // Parte superior roja (columnas 0-2 después de rotar)
+            if (col < 3) {
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 0, 0)));
+            }
+            // Línea negra centro (columna 3)
+            else if (col == 3) {
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(50, 50, 50)));
+            }
+            // Botón blanco centro (columna 4)
+            else if (col == 4 && (7-row) >= 3 && (7-row) <= 4) {
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 255, 255)));
+            }
+            // Parte inferior blanca (columnas 5-7)
+            else {
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(200, 200, 200)));
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Función para dibujar hongo de Mario con colores
+void drawHongo(int startX, int startY) {
+  for (int row = 0; row < 8; row++) {
+    uint8_t rowData = spriteHongo[row];
+    
+    for (int col = 0; col < 8; col++) {
+      if (rowData & (1 << (7 - col))) {
+        // Rotar 90° horario
+        int x = startX + col;
+        int y = startY + (7 - row);
+        
+        if (x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT) {
+          int pixelIndex = getPixelIndex(x, y);
+          if (pixelIndex >= 0) {
+            // Sombrero rojo (columnas 1-4 después de rotar)
+            if (col >= 1 && col <= 4) {
+              // Puntos blancos en el sombrero
+              if ((x == startX + 2 && y == startY + 5) || (x == startX + 5 && y == startY + 4)) {
+                strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 255, 255)));
+              } else {
+                strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 0, 0)));
+              }
+            }
+            // Tallo blanco (columnas 5-7)
+            else {
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(240, 230, 200)));
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Función para dibujar Mario sin rotación (vertical)
+void drawMario(const uint8_t sprite[], int startX, int startY, uint32_t color) {
+  uint32_t scaledColor = escalarColor(color);
+  
+  for (int row = 0; row < 8; row++) {
+    uint8_t rowData = sprite[row];
+    
+    for (int col = 0; col < 8; col++) {
+      if (rowData & (1 << (7 - col))) {
+        // Igual que Pokébola: rotar 90° horario
+        int x = startX + col;
+        int y = startY + (7 - row);
+        
+        if (x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT) {
+          int pixelIndex = getPixelIndex(x, y);
+          if (pixelIndex >= 0) {
+            strip.setPixelColor(pixelIndex, scaledColor);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Función para dibujar Corazón rotado 90° adicional con color personalizado
+void drawCorazon(int startX, int startY, uint32_t color) {
+  uint32_t scaledColor = escalarColor(color);
+  
+  for (int row = 0; row < 8; row++) {
+    uint8_t rowData = spriteCorazon[row];
+    
+    for (int col = 0; col < 8; col++) {
+      if (rowData & (1 << (7 - col))) {
+        // Rotación ajustada para orientación correcta (no de cabeza)
+        int x = startX + row;
+        int y = startY + col;
+        
+        if (x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT) {
+          int pixelIndex = getPixelIndex(x, y);
+          if (pixelIndex >= 0) {
+            strip.setPixelColor(pixelIndex, scaledColor);
+          }
+        }
+      }
+    }
+  }
+}
+
+// ============== ANIMACIONES DE SPRITES ==============
+
+// Mostrar sprite estático centrado
+void mostrarSpriteEstatico(const uint8_t sprite[], uint32_t color, int duracion) {
+  strip.clear();
+  drawSprite(sprite, 0, 12, color); // Centrado verticalmente
+  strip.show();
+  delay(duracion);
+}
+
+// Galería de sprites estáticos
+void galeriaSprites() {
+  // Pikachu
+  mostrarSpriteEstatico(spritePikachu, strip.Color(255, 255, 0), 2000);
+  delay(200);
+  
+  // Pokébola con colores
+  strip.clear();
+  drawPokebola(0, 12);
+  strip.show();
+  delay(2000);
+  delay(200);
+  
+  // Mario
+  mostrarSpriteEstatico(spriteMario, strip.Color(255, 0, 0), 2000);
+  delay(200);
+  
+  // Hongo con colores
+  strip.clear();
+  drawHongo(0, 12);
+  strip.show();
+  delay(2000);
+  delay(200);
+  
+  // Pac-Man
+  mostrarSpriteEstatico(spritePacman, strip.Color(255, 255, 0), 2000);
+  delay(200);
+  
+  // Corazón
+  mostrarSpriteEstatico(spriteCorazon, strip.Color(255, 20, 147), 2000);
+  delay(200);
+  
+  // Estrella
+  mostrarSpriteEstatico(spriteEstrella, strip.Color(255, 215, 0), 2000);
+  delay(200);
+}
+
+// Animación de aparición gradual (fade in)
+void apareceSprite(const uint8_t sprite[], uint32_t color) {
+  for (int brillo = 0; brillo <= 10; brillo++) {
+    strip.clear();
+    
+    // Ajustar temporalmente el brillo
+    int brilloOriginal = BRILLO_GENERAL;
+    
+    for (int row = 0; row < 8; row++) {
+      uint8_t rowData = sprite[row];
+      
+      for (int col = 0; col < 8; col++) {
+        if (rowData & (1 << (7 - col))) {
+          int x = 0 + row;
+          int y = 12 + col;
+          
+          if (x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT) {
+            int pixelIndex = getPixelIndex(x, y);
+            if (pixelIndex >= 0) {
+              uint8_t r = ((color >> 16) & 0xFF) * brillo / 10;
+              uint8_t g = ((color >> 8) & 0xFF) * brillo / 10;
+              uint8_t b = (color & 0xFF) * brillo / 10;
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(r, g, b)));
+            }
+          }
+        }
+      }
+    }
+    
+    strip.show();
+    delay(100);
+  }
+  delay(1500);
+}
+
+// Secuencia de apariciones
+void secuenciaApariciones() {
+  apareceSprite(spritePikachu, strip.Color(255, 255, 0));
+  strip.clear();
+  strip.show();
+  delay(300);
+  
+  apareceSprite(spriteMario, strip.Color(255, 0, 0));
+  strip.clear();
+  strip.show();
+  delay(300);
+  
+  apareceSprite(spriteCorazon, strip.Color(255, 20, 147));
+  strip.clear();
+  strip.show();
+  delay(300);
+}
+
+// Pikachu parpadeando (centrado horizontalmente)
+void pikachuParpadeo(int cycles) {
+  for (int i = 0; i < cycles; i++) {
+    strip.clear();
+    drawSprite(spritePikachu, 0, 12, strip.Color(255, 255, 0)); // Amarillo, centrado
+    strip.show();
+    delay(800);
+    
+    strip.clear();
+    strip.show();
+    delay(200);
+  }
+}
+
+// Mario caminando horizontalmente (a lo largo de las 32 filas)
+void marioCamina(int duration) {
+  for (int pos = -8; pos < MATRIX_HEIGHT + 8; pos++) {
+    strip.clear();
+    
+    // Alternar entre sprite normal y saltando para simular caminar
+    int xPos = 0; // Posición X fija (columna 0)
+    if ((pos / 2) % 2 == 0) {
+      drawMario(spriteMario, xPos, pos, strip.Color(255, 0, 0)); // Rojo
+    } else {
+      drawMario(spriteMarioJump, xPos, pos, strip.Color(255, 0, 0)); // Rojo
+    }
+    
+    strip.show();
+    delay(duration);
+  }
+}
+
+// Animación de corazones moviéndose horizontalmente
+void corazonesSubiendo(int numCorazones) {
+  for (int i = 0; i < numCorazones; i++) {
+    int offsetX = random(0, MATRIX_WIDTH - 8); // Posición X aleatoria
+    
+    for (int y = -8; y < MATRIX_HEIGHT + 8; y += 2) {
+      strip.clear();
+      drawCorazon(offsetX, y, strip.Color(255, 20, 147)); // Rosa/Magenta
+      strip.show();
+      delay(80);
+    }
+    delay(100);
+  }
+}
+
+// Múltiples corazones moviéndose simultáneamente con diferentes colores
+void corazonesSimultaneos(int numCorazones, int duracion) {
+  int offsetsX[numCorazones];
+  int posicionesY[numCorazones];
+  uint32_t colores[numCorazones];
+  
+  // Colores variados para los corazones
+  uint32_t paletaColores[] = {
+    strip.Color(255, 20, 147),  // Rosa/Magenta
+    strip.Color(255, 0, 100),   // Rosa oscuro
+    strip.Color(255, 100, 150), // Rosa claro
+    strip.Color(255, 50, 200),  // Rosa-púrpura
+    strip.Color(255, 0, 255),   // Magenta puro
+    strip.Color(200, 0, 150)    // Magenta oscuro
+  };
+  
+  // Inicializar posiciones aleatorias más separadas
+  for (int i = 0; i < numCorazones; i++) {
+    offsetsX[i] = random(0, MATRIX_WIDTH - 8);
+    posicionesY[i] = -8 - (i * 15); // Más separados (15 píxeles entre cada uno)
+    colores[i] = paletaColores[i % 6]; // Asignar color de la paleta
+  }
+  
+  // Animar todos simultáneamente
+  for (int frame = 0; frame < duracion; frame++) {
+    strip.clear();
+    
+    for (int i = 0; i < numCorazones; i++) {
+      drawCorazon(offsetsX[i], posicionesY[i], colores[i]);
+      posicionesY[i] += 2;
+      
+      // Reiniciar cuando sale por abajo
+      if (posicionesY[i] > MATRIX_HEIGHT + 8) {
+        posicionesY[i] = -8;
+        offsetsX[i] = random(0, MATRIX_WIDTH - 8);
+        colores[i] = paletaColores[random(0, 6)]; // Nuevo color aleatorio
+      }
+    }
+    
+    strip.show();
+    delay(80);
+  }
+}
+
+// Efecto de lluvia con colores arcoíris
+void lluviaArcoiris(int duracion) {
+  for (int frame = 0; frame < duracion; frame++) {
+    // Agregar nuevas gotas aleatorias en la parte superior
+    for (int i = 0; i < 3; i++) {
+      int x = random(0, MATRIX_WIDTH);
+      int hue = random(0, 65536);
+      uint32_t color = escalarColor(strip.gamma32(strip.ColorHSV(hue)));
+      int pixelIndex = getPixelIndex(x, 0);
+      if (pixelIndex >= 0) {
+        strip.setPixelColor(pixelIndex, color);
+      }
+    }
+    
+    // Mover todas las gotas hacia abajo
+    for (int y = MATRIX_HEIGHT - 1; y > 0; y--) {
+      for (int x = 0; x < MATRIX_WIDTH; x++) {
+        int currentIndex = getPixelIndex(x, y);
+        int aboveIndex = getPixelIndex(x, y - 1);
+        if (currentIndex >= 0 && aboveIndex >= 0) {
+          uint32_t colorAbove = strip.getPixelColor(aboveIndex);
+          strip.setPixelColor(currentIndex, colorAbove);
+        }
+      }
+    }
+    
+    strip.show();
+    delay(80);
+  }
+}
+
+// Efecto de estrellas parpadeando
+void estrellasAleatorias(int duracion) {
+  for (int frame = 0; frame < duracion; frame++) {
+    strip.clear();
+    
+    // Dibujar estrellas aleatorias
+    int numEstrellas = random(8, 15);
+    for (int i = 0; i < numEstrellas; i++) {
+      int x = random(0, MATRIX_WIDTH);
+      int y = random(0, MATRIX_HEIGHT);
+      int hue = random(0, 65536);
+      uint32_t color = escalarColor(strip.gamma32(strip.ColorHSV(hue)));
+      int pixelIndex = getPixelIndex(x, y);
+      if (pixelIndex >= 0) {
+        strip.setPixelColor(pixelIndex, color);
+      }
+    }
+    
+    strip.show();
+    delay(100);
+  }
+}
+
+// Onda de color que recorre la matriz
+void ondaColor(int ciclos) {
+  for (int ciclo = 0; ciclo < ciclos; ciclo++) {
+    for (int offset = 0; offset < MATRIX_HEIGHT; offset++) {
+      strip.clear();
+      
+      for (int y = 0; y < MATRIX_HEIGHT; y++) {
+        for (int x = 0; x < MATRIX_WIDTH; x++) {
+          int distancia = abs(y - offset);
+          if (distancia < 4) {
+            int brillo = 255 - (distancia * 64);
+            int hue = (offset * 2000 + ciclo * 5000) % 65536;
+            uint32_t color = escalarColor(strip.gamma32(strip.ColorHSV(hue, 255, brillo)));
+            int pixelIndex = getPixelIndex(x, y);
+            if (pixelIndex >= 0) {
+              strip.setPixelColor(pixelIndex, color);
+            }
+          }
+        }
+      }
+      
+      strip.show();
+      delay(50);
+    }
+  }
+}
+
+// Estrellas parpadeando en posiciones aleatorias
+void estrellasParpadeo(int duration) {
+  for (int i = 0; i < duration; i++) {
+    strip.clear();
+    
+    // Dibujar varias estrellas en posiciones aleatorias
+    int numEstrellas = random(2, 4);
+    for (int e = 0; e < numEstrellas; e++) {
+      int xPos = random(-4, MATRIX_WIDTH - 4);
+      int yPos = random(0, MATRIX_HEIGHT - 8);
+      drawSprite(spriteEstrella, xPos, yPos, strip.Color(255, 255, 0)); // Amarillo
+    }
+    
+    strip.show();
+    delay(300);
+    
+    strip.clear();
+    strip.show();
+    delay(200);
+  }
+}
+
+// Fantasma flotando horizontalmente
+void fantasmaFlotando(int cycles) {
+  for (int cycle = 0; cycle < cycles; cycle++) {
+    // Movimiento de izquierda a derecha
+    int yPos = 12; // Centrado verticalmente
+    
+    for (int x = -8; x < MATRIX_WIDTH + 8; x++) {
+      strip.clear();
+      
+      // Cambiar colores: azul, rosa, naranja, cyan
+      uint32_t color;
+      switch(cycle % 4) {
+        case 0: color = strip.Color(0, 255, 255); break;   // Cyan
+        case 1: color = strip.Color(255, 0, 255); break;   // Magenta
+        case 2: color = strip.Color(255, 165, 0); break;   // Naranja
+        case 3: color = strip.Color(255, 255, 255); break; // Blanco
+      }
+      
+      drawSprite(spriteFantasma, x, yPos, color);
+      strip.show();
+      delay(60);
+    }
+  }
+}
+
+// Notas musicales moviéndose horizontalmente
+void notasMusicales(int numNotas) {
+  for (int i = 0; i < numNotas; i++) {
+    int yPos = random(4, MATRIX_HEIGHT - 12); // Posición vertical aleatoria
+    
+    for (int x = -8; x < MATRIX_WIDTH + 8; x++) {
+      strip.clear();
+      
+      // Colores variados para las notas
+      uint32_t color;
+      switch(i % 3) {
+        case 0: color = strip.Color(255, 0, 255); break;   // Magenta
+        case 1: color = strip.Color(0, 255, 255); break;   // Cyan
+        case 2: color = strip.Color(255, 255, 0); break;   // Amarillo
+      }
+      
+      drawSprite(spriteNota, x, yPos, color);
+      strip.show();
+      delay(50);
+    }
+    delay(50);
+  }
+}
+
+// Sprite parade - desfile de personajes (horizontal)
+void spriteParade() {
+  const uint8_t* sprites[] = {spritePikachu, spriteMario, spriteCorazon, spriteEstrella, spriteFantasma, spriteNota};
+  uint32_t colors[] = {
+    strip.Color(255, 255, 0),   // Amarillo (Pikachu)
+    strip.Color(255, 0, 0),     // Rojo (Mario)
+    strip.Color(255, 20, 147),  // Rosa (Corazón)
+    strip.Color(255, 215, 0),   // Dorado (Estrella)
+    strip.Color(0, 255, 255),   // Cyan (Fantasma)
+    strip.Color(255, 0, 255)    // Magenta (Nota)
+  };
+  
+  for (int s = 0; s < 6; s++) {
+    int yPos = 8 + (s % 3) * 8; // Variar posición vertical
+    
+    for (int x = -8; x < MATRIX_WIDTH + 8; x++) {
+      strip.clear();
+      drawSprite(sprites[s], x, yPos, colors[s]);
+      strip.show();
+      delay(50);
+    }
+    delay(200);
+  }
+}
+
 void displayChar(char c, int offsetX, int offsetY, uint32_t color) {
   int charIndex = getCharIndex(c);
   
   // Escalar el color según el brillo general
   uint32_t scaledColor = escalarColor(color);
   
-  // Orientación horizontal corregida para evitar inversión
+  // Orientación horizontal con columnas invertidas para evitar efecto espejo
   for (int col = 0; col < 5; col++) {
-    uint8_t columnData = font5x8[charIndex][4 - col]; // Invertir el orden de las columnas
+    uint8_t columnData = font5x8[charIndex][4 - col]; // Invertir columnas
     
     for (int row = 0; row < 8; row++) {
       if (columnData & (1 << row)) {
@@ -305,8 +941,8 @@ void banderaMexicana(int duration) {
     strip.clear();
     
     // Dividir la matriz en 3 secciones horizontales para la bandera real
-    // Verde arriba, Blanco centro, Rojo abajo
-    // Para 32 filas: Verde (0-10), Blanco (11-21), Rojo (22-31)
+    // Rojo arriba, Blanco centro, Verde abajo
+    // Para 32 filas: Rojo (0-10), Blanco (11-21), Verde (22-31)
     for (int y = 0; y < MATRIX_HEIGHT; y++) {
       for (int x = 0; x < MATRIX_WIDTH; x++) {
         int pixelIndex = getPixelIndex(x, y);
@@ -318,14 +954,14 @@ void banderaMexicana(int duration) {
             // Área del águila apagada
             strip.setPixelColor(pixelIndex, strip.Color(0, 0, 0));
           } else if (y < 11) {
-            // Verde (parte superior) - filas 0-10
-            strip.setPixelColor(pixelIndex, escalarColor(strip.Color(0, 255, 0)));
+            // Rojo (parte superior) - filas 0-10
+            strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 0, 0)));
           } else if (y < 22) {
             // Blanco (centro) - filas 11-21
             strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 255, 255)));
           } else {
-            // Rojo (parte inferior) - filas 22-31
-            strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 0, 0)));
+            // Verde (parte inferior) - filas 22-31
+            strip.setPixelColor(pixelIndex, escalarColor(strip.Color(0, 255, 0)));
           }
         }
       }
@@ -361,14 +997,14 @@ void banderaOndeando(int cycles) {
               // Área del águila apagada
               strip.setPixelColor(pixelIndex, strip.Color(0, 0, 0));
             } else if (adjustedY < 11) {
-              // Verde (parte superior) - filas 0-10
-              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(0, 255, 0)));
+              // Rojo (parte superior) - filas 0-10
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 0, 0)));
             } else if (adjustedY < 22) {
               // Blanco (centro) - filas 11-21
               strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 255, 255)));
             } else {
-              // Rojo (parte inferior) - filas 22-31
-              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 0, 0)));
+              // Verde (parte inferior) - filas 22-31
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(0, 255, 0)));
             }
           }
         }
@@ -401,11 +1037,11 @@ void banderaOndulante(int cycles) {
               // Área del águila apagada
               strip.setPixelColor(pixelIndex, strip.Color(0, 0, 0));
             } else if (colorSection == 0) {
-              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(0, 255, 0))); // Verde
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 0, 0))); // Rojo
             } else if (colorSection == 1) {
               strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 255, 255))); // Blanco
             } else {
-              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(255, 0, 0))); // Rojo
+              strip.setPixelColor(pixelIndex, escalarColor(strip.Color(0, 255, 0))); // Verde
             }
           }
         }
@@ -793,6 +1429,43 @@ void testCuatroPuntos() {
   Serial.println("Verifica que colores ves y en que posiciones");
 }
 
+// Prueba de colores RGB principales al arranque
+void testColoresRGB() {
+  Serial.println("=== TEST COLORES RGB ===");
+  
+  // ROJO
+  Serial.println("ROJO");
+  for (int i = 1; i <= 256; i++) {
+    strip.setPixelColor(i, escalarColor(strip.Color(255, 0, 0)));
+  }
+  strip.show();
+  delay(1000);
+  
+  // VERDE
+  Serial.println("VERDE");
+  for (int i = 1; i <= 256; i++) {
+    strip.setPixelColor(i, escalarColor(strip.Color(0, 255, 0)));
+  }
+  strip.show();
+  delay(1000);
+  
+  // AZUL
+  Serial.println("AZUL");
+  for (int i = 1; i <= 256; i++) {
+    strip.setPixelColor(i, escalarColor(strip.Color(0, 0, 255)));
+  }
+  strip.show();
+  delay(1000);
+  
+  // Apagar todo
+  strip.clear();
+  strip.show();
+  delay(300);
+  
+  Serial.println("Test RGB completado");
+  Serial.println("");
+}
+
 void setup() {
   strip.begin();
   strip.setBrightness(64);
@@ -810,46 +1483,66 @@ void setup() {
   Serial.println("Matriz: LEDs 1-256 en patron serpentina");
   Serial.println("8 columnas x 32 filas = 256 LEDs");
   Serial.println("¡VIVA MEXICO!");
+  Serial.println("");
+  
+  // Prueba de colores RGB al arranque
+  testColoresRGB();
 }
 
 void loop() {
-  // === TEST DE 4 PUNTOS CLAVE ===
-  // Descomentar para probar los 4 LEDs clave
-  testCuatroPuntos();
-  delay(5000); // Mantener encendido 5 segundos
+  // === ANIMACIONES SELECCIONADAS ===
   
-  /* DESCOMENTA ESTA SECCIÓN DESPUÉS DE VERIFICAR LOS 4 PUNTOS
-  
-  // === FIESTAS PATRIAS CON BANDERAS MEXICANAS Y FUEGOS ARTIFICIALES ===
-
-  
-  // 2. Efecto bandera mexicana horizontal estática
-  banderaMexicana(40); // 2 segundos de bandera
-  delay(300);
-  
-  // 3. Scroll "UNIT ELECTRONICS" en blanco
-  scrollText(reverseString("   UNIT ELECTRONICS"), strip.Color(255, 255, 255), 45);
-  fuegoIndividual(strip.Color(255, 255, 255)); // Fuego blanco
-  delay(250);
-  
-
-  // 5. Scroll fecha en verde (ACTUALIZADA A 2025)
-  scrollText(reverseString("   16 SEPTIEMBRE 2025"), strip.Color(0, 255, 0), 50);
-  fuegoIndividual(strip.Color(0, 255, 0)); // Fuego verde
-  delay(250);
-  
-
-
-  // 8. Scroll "VIVA MEXICO!" en verde
-  scrollText(reverseString("   VIVA MEXICO!"), strip.Color(0, 255, 0), 45);
-  fuegoIndividual(strip.Color(0, 255, 0)); // Fuego verde
-  delay(250);
-  
-
-
-  // 13. ¡GRAN FINAL CON FUEGOS ARTIFICIALES!
-  espectaculoFuegos();
+  // 1. Texto "UNIT" desplazándose con color blanco
+  scrollText(reverseString("UNIT Electronics"), strip.Color(255, 255, 255), 100);
   delay(500);
   
-  */
+  // 2. Tres Pokébolas moviéndose simultáneamente
+  int pokebolaX[3];
+  int pokebolaY[3];
+  
+  // Inicializar posiciones
+  for (int i = 0; i < 3; i++) {
+    pokebolaX[i] = random(0, MATRIX_WIDTH - 8);
+    pokebolaY[i] = -8 - (i * 10); // Escalonadas
+  }
+  
+  // Animar las 3 pokébolas al mismo tiempo
+  bool todasTerminaron = false;
+  while (!todasTerminaron) {
+    strip.clear();
+    todasTerminaron = true;
+    
+    for (int i = 0; i < 3; i++) {
+      if (pokebolaY[i] < MATRIX_HEIGHT + 8) {
+        drawPokebola(pokebolaX[i], pokebolaY[i]);
+        pokebolaY[i] += 2;
+        todasTerminaron = false;
+      }
+    }
+    
+    strip.show();
+    delay(60);
+  }
+  
+  delay(300);
+  
+  // 3. Corazones moviéndose simultáneamente (6 corazones durante 60 frames)
+  corazonesSimultaneos(6, 60);
+  delay(300);
+  
+  // 4. Lluvia arcoíris
+  lluviaArcoiris(50);
+  delay(300);
+  
+  // 5. Estrellas parpadeando
+  estrellasAleatorias(30);
+  delay(300);
+  
+  // 6. Onda de color
+  ondaColor(2);
+  delay(300);
+  
+  // 7. Texto arcoíris con corrección de orientación
+  rainbowText(reverseString("MEXICO"), 80);
+  delay(500);
 }

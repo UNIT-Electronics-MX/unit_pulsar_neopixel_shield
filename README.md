@@ -1,23 +1,11 @@
 
 # Pulsar: Neopixel Shield
-<!-- Exception:
 
-The PULSAR development board line does not use the DevLab: prefix.
+The shield matrix is designed to be compatible with the Pulsar development board format, featuring 256 RGB LEDs. This allows for independent control of each pixel to create a wide range of visual effects, from simple patterns (solid colors, bars, gradients) to complex animations (waves, scrolling text, sprites, indicators). This makes it ideal for applications in interactive displays, wearables, and creative projects.
 
-Format: PULSAR [MCU/Model]
-
-Examples: PULSAR C6, PULSAR H2, PULSAR RP2350
-
-The JUN R3 board also does not use DevLab:
-
-Example: JUN R3 -->
-
-## Introduction
-
-This is a modular development board based on a popular microcontroller, designed for rapid prototyping and educational use. It features flexible power options, modern connectivity, and user-friendly interfaces. An integrated LED matrix allows for simple visual feedback and display.
 
 <div align="center">
-  <img src="hardware/resources/unit_top_v_1_0_0_icp10111_barometric_pressure_sensor.png" width="450px" alt="Development Board">
+  <img src="hardware/resources/unit_top_v_1_0_0_pulsar_neopixel.jpg" width="450px" alt="Development Board">
   <p><em>Development Board</em></p>
 </div>
 
@@ -38,26 +26,14 @@ This is a modular development board based on a popular microcontroller, designed
 
 | Feature           | Description                                         |
 |-------------------|-----------------------------------------------------|
-| Microcontroller   | 8-bit MCU                                           |
-| Memory            | Flash, SRAM, EEPROM                                 |
-| Clock Speed       | 16 MHz                                              |
-| Power Supply      | USB-C (5V)                                          |
-| Interfaces        | UART, I2C, SPI, PWM, ADC, GPIO                      |
-| LED Matrix        | 5x5 RGB LED Matrix                                  |
-| Connectivity      | USB-C for programming and power                     |
-| Form Factor       | UNO-compatible                                      |
-| Development IDEs  | Arduino IDE, PlatformIO                             |
-| Onboard Features  | Integrated LED matrix, programmable LED, reset button|
-| Expansion Port    | I2C connector for sensors and modules               |
+| **LED Count**     | 256 RGB LEDs (WS2812B)                              |
+
+
 
 </div>
 
 ## Applications
 
-- **Prototyping:** Quickly develop and test ideas.
-- **Education:** Suitable for learning microcontroller basics.
-- **Wearables:** Compact and versatile for wearable devices.
-- **Displays:** Use the LED matrix for simple visual output.
 
 ## Resources
 

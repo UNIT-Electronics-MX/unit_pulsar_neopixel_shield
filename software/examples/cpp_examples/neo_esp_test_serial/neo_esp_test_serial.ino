@@ -15,6 +15,7 @@ void setup() {
   strip.clear();
   
   // LED 0 como indicador
+  
   strip.setPixelColor(0, strip.Color(0, 50, 0));
   strip.show();
   

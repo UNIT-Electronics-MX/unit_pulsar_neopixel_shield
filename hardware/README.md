@@ -7,10 +7,11 @@
 ## Pinout
 
 <div align="center">
-    <a href="#"><img src="resources/unit_pinout_v_0_0_1_ue0094_icp10111_barometric_pressure_sensor_en.jpg" width="500px"><br/>Pinout</a>
-    <br/>
-    <br/>
-    <br/>
+<a href="./unit_pinout_v_1_0_0_ue00118_pulsar_neopixel_shield_en.pdf">
+<img src="./resources/unit_pinout_v_1_0_0_ue00118_pulsar_neopixel_shield_en.jpg" width="500px"><br/>
+Pinout
+</a>
+</div>
     
 | Pin Label | Function | Notes |
 |-----------|----------|-------|

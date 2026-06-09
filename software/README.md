@@ -1,25 +1,47 @@
-# Getting Started
+# Software
 
-Welcome to the project! This guide will help you set up your development environment and start working with the board.
+This directory contains the software resources for the RGB LED matrix shield project.
 
-## Prerequisites
+The purpose of this folder is to organize source code, examples, tests, and future software tools related to the control and validation of the shield. The examples included here are intended to help users understand how to interact with the RGB LED matrix using different programming environments.
 
-- Ensure you have the required hardware and cables.
-- Install necessary software tools (see [Installation](#installation) below).
+---
 
-## Installation
+## Directory Structure
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/your-org/your-project.git
-    ```
-2. Follow the setup instructions in the `docs/` directory.
+```text
+software/
+├── examples/
+│   ├── cpp_examples/
+│   └── micropython/
+└── README.md
+```
 
-## Usage
+---
 
-- Connect the board to your computer.
-- Build and flash the firmware as described in the [User Guide](docs/USER_GUIDE.md).
+## Contents
 
-## Support
+### `examples/`
 
-For questions or issues, please open an issue on GitHub.
+Contains example projects and test programs for the RGB LED matrix shield.
+
+These examples are organized by programming language or development environment. The current examples are focused on C++/Arduino-based development, while MicroPython examples may be added in the future.
+
+---
+
+## Purpose
+
+This software section is intended to provide:
+
+* Basic test programs.
+* Hardware validation examples.
+* LED matrix control examples.
+* Reference code for future development.
+* Starting points for custom animations and interactive applications.
+
+---
+
+## Notes
+
+The examples in this directory are mainly intended for development, debugging, and educational purposes.
+
+Before using any example, make sure to review the pin configuration, LED count, power requirements, and library dependencies.

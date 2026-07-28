@@ -13,8 +13,8 @@ The shield matrix is designed to be compatible with the Pulsar development board
 
 ### Quick Setup
 
-[<img src="https://img.shields.io/badge/Product%20Wiki-blue?style=for-the-badge" alt="Product Wiki">](#)
-[<img src="https://img.shields.io/badge/Datasheet-green?style=for-the-badge" alt="Datasheet">](#)
+[<img src="https://img.shields.io/badge/Product%20Wiki-blue?style=for-the-badge" alt="Product Wiki">](https://wiki.uelectronics.com/wiki/unit_pulsar_neopixel_shield)
+[<img src="https://img.shields.io/badge/Datasheet-green?style=for-the-badge" alt="Datasheet">](./hardware/unit_datasheet_v_1_0_0_ue00118_pulsar_neopixel_shield.pdf)
 [<img src="https://img.shields.io/badge/Buy%20Now-orange?style=for-the-badge" alt="Buy Now">](#)
 [<img src="https://img.shields.io/badge/Getting%20Started-purple?style=for-the-badge" alt="Getting Started">](#)
 
@@ -37,8 +37,8 @@ The shield matrix is designed to be compatible with the Pulsar development board
 
 ## Resources
 
-- [Schematic Diagram](#)
-- [Pinout Diagram](#)
+- [Schematic Diagram](./hardware/unit_sch_v_1_0_0_pulsar_neopixel.pdf)
+- [Pinout Diagram](./hardware/unit_pinout_v_1_0_0_ue00118_pulsar_neopixel_shield_en.pdf)
 - [Getting Started Guide](#)
 
 ## 📝 License

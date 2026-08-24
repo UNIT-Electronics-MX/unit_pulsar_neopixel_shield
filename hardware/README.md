@@ -8,7 +8,7 @@
 
 <div align="center">
 <a href="./unit_pinout_v_1_0_0_ue00118_pulsar_neopixel_shield_en.pdf">
-<img src="./resources/unit_pinout_v_1_0_0_ue00118_pulsar_neopixel_shield_en.jpg" width="500px"><br/>
+<img src="./resources/unit_pinout_v_1_0_0_ue00118_pulsar_neopixel_shield_en.png" width="500px"><br/>
 Pinout
 </a>
 </div>
